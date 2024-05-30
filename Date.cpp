@@ -4,6 +4,7 @@
 // #include<ctime>
 using namespace std;
 
+
 class Date{
 private:
 	int day,month,year;
@@ -59,6 +60,13 @@ public:
 	bool operator>(const Date& other){
 		return !(*this < other);
 	}
+	bool operator>=(const Date& other){
+		return (*this > other || *this == other);
+	}
+	bool operator<=(const Date& other){
+		return (*this < other || *this == other);
+	}
+
 	~Date(){};
 };
 
@@ -66,19 +74,43 @@ class LstDate {
 private:
 	vector<Date> dates;
 public:
+	int size(){
+		return dates.size();
+	}
 	void addDate(Date date) {
 		dates.push_back(date); // Hàm pushback là thêm phần tử vào mảng
 	}
-	void sort(){
-		Date temp;
-		for (int i=0;i<dates.size()-1;i++){
-			for(int j=i;j<dates.size();j++)
-			if (dates[i] > dates[j]){
-				temp = dates[i];
-				dates[i] = dates[j];
-				dates[j] = temp; 
-			}
-		}
+	void swapDate(Date& a, Date& b) {
+	    Date temp = a;
+	    a = b;
+	    b = temp;
+	}
+
+	// Partition function
+	int partition(int low, int high) {
+	    Date pivot = dates[high]; // pivot element
+	    int i = low - 1; // index of the smaller element
+
+	    for (int j = low; j <= high - 1; j++) {
+	        // If the current element is smaller than or equal to the pivot
+	        if (dates[j] <= pivot) {
+	            i++; // increment the index of the smaller element
+	            swapDate(dates[i], dates[j]); // swapDate elements
+	        }
+	    }
+	    swapDate(dates[i + 1], dates[high]); // swapDate the pivot element with the element at i+1
+	    return (i + 1); // return the partitioning index
+	}
+
+	// Quicksort function
+
+	void quicksortDate(int low, int high) {
+	    if (low < high) {
+	        int pi = partition(low, high); // partitioning index
+
+	        quicksortDate(low, pi - 1); // recursively sort elements before partition
+	        quicksortDate(pi + 1, high); // recursively sort elements after partition
+	    }
 	}
 	void displayDate() { // Hàm hiển thị kho hàng
 		// cout << "Date List:" << endl;
@@ -102,10 +134,11 @@ int main(){
 	lstdate.addDate(Date(24,9,2005));
 	lstdate.addDate(Date(3,11,2005));
 	lstdate.addDate(Date(28,3,2005));
+	lstdate.addDate(Date(27,9,2007));
 	lstdate.addDate(Date(27,9,2006));
 	cout << "BEFORE: \n";
 	lstdate.displayDate();
-	lstdate.sort();
+	lstdate.quicksortDate(0,lstdate.size()-1);
 	cout << "AFTER: \n";
 	lstdate.displayDate();
 
