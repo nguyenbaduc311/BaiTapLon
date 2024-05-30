@@ -1,6 +1,7 @@
 // Nguyen Ba Duc 20233327
 #include<bits/stdc++.h>
-#include<ctime>
+#include <vector>
+// #include<ctime>
 using namespace std;
 
 class Date{
@@ -9,11 +10,11 @@ private:
 public:
 	Date(int a=1, int b=1,int c=1): day(a),month(b),year(c) {}
 	void setDate(){
-		while (true){
+		while (true){ // Nhập ngày tháng năm, nếu ngày ko tồn tại thì nhập lại
 			cout << "INPUT D M Y: ";
 			cin >> day >> month >> year;
 			if (isValidDate()) break;
-			cout << "Date does not exist" << endl;
+			cout << "Date does not exist. Try again." << endl;
 		} 
 	}
 	bool isLeapYear() {
@@ -42,8 +43,8 @@ public:
 	   return true;
 	}
 
-	void display(){
-		cout << day << "/"<< month << "/"<<year;
+	void display() const {
+		cout << day << "/"<< month << "/"<< year;
 	}
 	bool operator==(const Date& other){
 		return (day == other.day && month == other.month && year == other.year);
@@ -51,8 +52,8 @@ public:
 	bool operator<(const Date& other){
 		if (year<other.year) return true;
 		if (year>other.year) return false;
-		if (month<other.year) return true;
-		if (month>other.year) return false;
+		if (month<other.month) return true;
+		if (month>other.month) return false;
 		return day < other.day;
 	}
 	bool operator>(const Date& other){
@@ -61,19 +62,53 @@ public:
 	~Date(){};
 };
 
+class LstDate {
+private:
+	vector<Date> dates;
+public:
+	void addDate(Date date) {
+		dates.push_back(date); // Hàm pushback là thêm phần tử vào mảng
+	}
+	void sort(){
+		Date temp;
+		for (int i=0;i<dates.size()-1;i++){
+			for(int j=i;j<dates.size();j++)
+			if (dates[i] > dates[j]){
+				temp = dates[i];
+				dates[i] = dates[j];
+				dates[j] = temp; 
+			}
+		}
+	}
+	void displayDate() { // Hàm hiển thị kho hàng
+		// cout << "Date List:" << endl;
+		for (const auto& date : dates) { // vòng lặp lấy từng phần tử trong mảng
+			date.display(); // In ra từng sản phẩm một
+			cout << endl;
+		}
+	}
+};
+
+
 int main(){
 	// time_t t = time(nullptr);
 	// tm* now = localtime(&t);
 	// int day = now->tm_mday;
 	// int month = now->tm_mon+1;
 	// int year = now->tm_year+1900;
+	int d,m,y;
 
-	Date A;  
-	Date B;
-	A.setDate();
-	B.setDate();
-	if (A.isLeapYear()){
-		cout << "kkk";
-	} else cout <<"heheh";
+	LstDate lstdate;
+	lstdate.addDate(Date(24,9,2005));
+	lstdate.addDate(Date(3,11,2005));
+	lstdate.addDate(Date(28,3,2005));
+	lstdate.addDate(Date(27,9,2006));
+	cout << "BEFORE: \n";
+	lstdate.displayDate();
+	lstdate.sort();
+	cout << "AFTER: \n";
+	lstdate.displayDate();
+
+
 	return 0;
 }
