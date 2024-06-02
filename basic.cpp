@@ -4,7 +4,6 @@
 #include <string> // thư viện liên quan tới chuỗi kí tự 
 #include <limits>
 #include <conio.h>
-// #include "Date.h"
 
 using namespace std;
 
@@ -14,27 +13,35 @@ private:
 	string code; // MÃ ĐỊNH DANH (mỗi sản phẩm phải có 1 mã khác nhau)
 	int quantity; // SỐ LƯỢNG sản phẩm
 	long long price; // ĐƠN GIÁ của 1 sản phẩm, vì là VNĐ nên để long long
-	// Date date; // THỜI GIAN (nhập xuất)	
 public:
 	Product(string n, string c, int q, long long p) // hàm tạo, phải có đủ 4 tham số truyền vào
 		: name(n), code(c), quantity(q), price(p) {} // lệnh gán
 
-	string getName(){ return name;} // Các hàm lấy và gán
-	string getCode(){ return code;}
-	int getQuantity(){ return quantity;}
-	long long getPrice(){ return price;}
-	void setName(string a){ name = a;}
-	void setCode(string b){ code = b;}
-	void setQuantity(int c){ quantity = c;}
-	void setPrice(long long d){ price = d;}
-	void display() const { // hàm hiển thị các thông số của sản phẩm
-		cout << "Product Code: " << code 
-			 << " | Name: " << name 
-			 << " | Quantity: " << quantity 
-			 << " | Price: " << price << endl;
-	}
+	string getName(); // Các hàm lấy và gán
+	string getCode();
+	int getQuantity();
+	long long getPrice();
+	void setName(string a);
+	void setCode(string b);
+	void setQuantity(int c);
+	void setPrice(long long d);
+	void display() const ;
 };
 
+string Product::getName(){ return name;} // Các hàm lấy và gán
+string Product::getCode(){ return code;}
+int Product::getQuantity(){ return quantity;}
+long long Product::getPrice(){ return price;}
+void Product::setName(string a){ name = a;}
+void Product::setCode(string b){ code = b;}
+void Product::setQuantity(int c){ quantity = c;}
+void Product::setPrice(long long d){ price = d;}
+void Product::display() const { // hàm hiển thị các thông số của sản phẩm
+	cout << "Product Code: " << code 
+		 << " | Name: " << name 
+		 << " | Quantity: " << quantity 
+		 << " | Price: " << price << endl;
+}
 class Inventory { // tạo đối tượng kho hàng (để quản lí đối tượng sản phẩm)
 private:
 	vector<Product> products; // Tạo 1 mảng có kiểu dữ liệu là "đối tượng <Product> "
@@ -49,83 +56,91 @@ private:
 	}
 
 public:
-	void swapProduct(Product& a, Product& b) {
-	    Product temp = a;
-	    a = b;
-	    b = temp;
-	}
-
-	void addProduct(Product product) { // Hàm thêm sản phẩm mới
-		int index = findProductIndexByCode(product.getCode()); 
-		if (index == -1) { // Nếu ko có mặt hàng này thì mới thêm vào mảng
-			products.push_back(product); // Hàm pushback là thêm phần tử vào mảng
-			cout << "Product added successfully." << endl;
-		} else {
-			cout << "Product with this code already exists." << endl;
-		}
-	}
-	void removeProduct(string code) { // Hàm xóa sản phẩm khỏi kho
-		int index = findProductIndexByCode(code);
-		if (index != -1) { // erase(*địa chỉ cần xóa*) : để xóa sản phẩm
-			products.erase(products.begin() + index); // begin() là lấy vị trí con trỏ đầu tiên của mảng
-			cout << "Product removed successfully." << endl;
-		} else {
-			cout << "Product not found." << endl;
-		}
-	}
-	void importProduct(string code, int quantity) { // Tìm sản phẩm rồi thêm số lượng sản phẩm
-		int index = findProductIndexByCode(code); 
-		if (index != -1) {
-			products[index].setQuantity(products[index].getQuantity() + quantity); // Thêm số lượng
-			cout << "Product imported successfully." << endl;
-		} else {
-			cout << "Product not found." << endl;
-		}
-	}
-	void editProduct(string code, string name, long long price) { // Sửa thông số của sản phâm (tên, giá)
-		int index = findProductIndexByCode(code); 
-		if (index != -1) {
-			products[index].setName(name); // SỬa lại tên
-			products[index].setPrice(price); // Sửa lại giá
-			cout << "Product edited successfully." << endl;
-		} else {
-			cout << "Product not found." << endl;
-		}
-	}
-	void exportProduct(string code, int quantity) { // Xuất hàng 
-		int index = findProductIndexByCode(code);
-		if (index != -1) {
-			if (products[index].getQuantity() >= quantity) { // check xem có đủ lượng hàng để xuất hàng ko
-				products[index].setQuantity(products[index].getQuantity() - quantity); // Giảm số lượng
-				cout << "Product exported successfully." << endl;
-			} else {
-				cout << "Not enough quantity in stock." << endl;
-			}
-		} else {
-			cout << "Product not found." << endl;
-		}
-	}
-	void errorProduct(string code,int quantity){ // Vứt bỏ hàng lỗi ra khỏi kho
-		int index = findProductIndexByCode(code);
-		if (index != -1) {
-			if (products[index].getQuantity() >= quantity) { // check xem có đủ lượng hàng để trừ ko
-				products[index].setQuantity(products[index].getQuantity() - quantity); // Giảm số lượng hàng hỏng
-				cout << "Error Product removed successfully." << endl;
-			} else {
-				cout << "Not enough quantity in stock." << endl;
-			}
-		} else {
-			cout << "Product not found." << endl;
-		}
-	}
-	void displayInventory() { // Hàm hiển thị kho hàng
-		cout << "Inventory List:" << endl;
-		for (const auto& product : products) { // vòng lặp lấy từng phần tử trong mảng
-			product.display(); // In ra từng sản phẩm một
-		}
-	}
+	void swapProduct(Product& a, Product& b);
+	void addProduct(Product product);
+	void removeProduct(string code);
+	void importProduct(string code, int quantity);
+	void editProduct(string code, string name, long long price);
+	void exportProduct(string code, int quantity);
+	void errorProduct(string code,int quantity);
+	void displayInventory();
 };
 
+void Inventory::swapProduct(Product& a, Product& b) {
+    Product temp = a;
+    a = b;
+    b = temp;
+}
+
+void Inventory::addProduct(Product product) { // Hàm thêm sản phẩm mới
+	int index = findProductIndexByCode(product.getCode()); 
+	if (index == -1) { // Nếu ko có mặt hàng này thì mới thêm vào mảng
+		products.push_back(product); // Hàm pushback là thêm phần tử vào mảng
+		cout << "Product added successfully." << endl;
+	} else {
+		cout << "Product with this code already exists." << endl;
+	}
+}
+void Inventory::removeProduct(string code) { // Hàm xóa sản phẩm khỏi kho
+	int index = findProductIndexByCode(code);
+	if (index != -1) { // erase(*địa chỉ cần xóa*) : để xóa sản phẩm
+		products.erase(products.begin() + index); // begin() là lấy vị trí con trỏ đầu tiên của mảng
+		cout << "Product removed successfully." << endl;
+	} else {
+		cout << "Product not found." << endl;
+	}
+}
+void Inventory::importProduct(string code, int quantity) { // Tìm sản phẩm rồi thêm số lượng sản phẩm
+	int index = findProductIndexByCode(code); 
+	if (index != -1) {
+		products[index].setQuantity(products[index].getQuantity() + quantity); // Thêm số lượng
+		cout << "Product imported successfully." << endl;
+	} else {
+		cout << "Product not found." << endl;
+	}
+}
+void Inventory::editProduct(string code, string name, long long price) { // Sửa thông số của sản phâm (tên, giá)
+	int index = findProductIndexByCode(code); 
+	if (index != -1) {
+		products[index].setName(name); // SỬa lại tên
+		products[index].setPrice(price); // Sửa lại giá
+		cout << "Product edited successfully." << endl;
+	} else {
+		cout << "Product not found." << endl;
+	}
+}
+void Inventory::exportProduct(string code, int quantity) { // Xuất hàng 
+	int index = findProductIndexByCode(code);
+	if (index != -1) {
+		if (products[index].getQuantity() >= quantity) { // check xem có đủ lượng hàng để xuất hàng ko
+			products[index].setQuantity(products[index].getQuantity() - quantity); // Giảm số lượng
+			cout << "Product exported successfully." << endl;
+		} else {
+			cout << "Not enough quantity in stock." << endl;
+		}
+	} else {
+		cout << "Product not found." << endl;
+	}
+}
+void Inventory::errorProduct(string code,int quantity){ // Vứt bỏ hàng lỗi ra khỏi kho
+	int index = findProductIndexByCode(code);
+	if (index != -1) {
+		if (products[index].getQuantity() >= quantity) { // check xem có đủ lượng hàng để trừ ko
+			products[index].setQuantity(products[index].getQuantity() - quantity); // Giảm số lượng hàng hỏng
+			cout << "Error Product removed successfully." << endl;
+		} else {
+			cout << "Not enough quantity in stock." << endl;
+		}
+	} else {
+		cout << "Product not found." << endl;
+	}
+}
+void Inventory::displayInventory() { // Hàm hiển thị kho hàng
+	cout << "Inventory List:" << endl;
+	for (const auto& product : products) { // vòng lặp lấy từng phần tử trong mảng
+		product.display(); // In ra từng sản phẩm một
+	}
+}
 void clearInputBuffer() { // Xóa bộ đệm
 	cin.clear(); 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa tối ưu hơn thôi.
