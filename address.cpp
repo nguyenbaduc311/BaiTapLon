@@ -1,12 +1,12 @@
-#include<bits/stdc++.h>
-#include "Address.h"
+#include<bits/stdc++.h>  //Tat ca cac thu vien chuan cua c++
+#include "Address.h"  // Su dung dinh nghia lop address tu tep .h
 using namespace std;
 
 string Address::getEmail() const {
-	return email;
+	return email;  // tra ve gia tri bien thanh vien email
 }
 void Address::setEmail(const string& email) {
-	this->email = email;
+	this->email = email;  //gan gia tri cua doi so cho email
 }
 string Address::getAddress() const {
 	return address;
@@ -27,12 +27,11 @@ void Address::display() const {
 }
 // int main() {
 // 	Address address1("example@example.com", "123 Main St", "123-456-7890");
-
 // 	address1.display();
 
 // 	Address address2;
-// 	string line;
-// 	getline(cin,line);
+// 	string line;            // khai bao bien line 
+// 	getline(cin,line);      // Doc 1 dong tu input va gan vao bien line  
 // 	address2.setEmail(line);
 // 	address2.setAddress("456 Elm St");
 // 	address2.setPhoneNumber("0365066311");
@@ -41,4 +40,3 @@ void Address::display() const {
 
 // 	return 0;
 // }
-
