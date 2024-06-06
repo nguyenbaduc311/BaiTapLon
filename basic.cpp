@@ -21,6 +21,7 @@ public:
 	string getCode();
 	int getQuantity();
 	long long getPrice();
+    long long int getTotalValue() const;
 	void setName(string a);
 	void setCode(string b);
 	void setQuantity(int c);
@@ -32,6 +33,7 @@ string Product::getName(){ return name;} // Các hàm lấy và gán
 string Product::getCode(){ return code;}
 int Product::getQuantity(){ return quantity;}
 long long Product::getPrice(){ return price;}
+long long int Product::getTotalValue() const { return price * quantity;}
 void Product::setName(string a){ name = a;}
 void Product::setCode(string b){ code = b;}
 void Product::setQuantity(int c){ quantity = c;}
@@ -63,6 +65,7 @@ public:
 	void editProduct(string code, string name, long long price);
 	void exportProduct(string code, int quantity);
 	void errorProduct(string code,int quantity);
+	void calculateTotalValue();
 	void displayInventory();
 };
 
@@ -71,7 +74,6 @@ void Inventory::swapProduct(Product& a, Product& b) {
     a = b;
     b = temp;
 }
-
 void Inventory::addProduct(Product product) { // Hàm thêm sản phẩm mới
 	int index = findProductIndexByCode(product.getCode()); 
 	if (index == -1) { // Nếu ko có mặt hàng này thì mới thêm vào mảng
@@ -135,12 +137,26 @@ void Inventory::errorProduct(string code,int quantity){ // Vứt bỏ hàng lỗ
 		cout << "Product not found." << endl;
 	}
 }
-void Inventory::displayInventory() { // Hàm hiển thị kho hàng
-	cout << "Inventory List:" << endl;
-	for (const auto& product : products) { // vòng lặp lấy từng phần tử trong mảng
-		product.display(); // In ra từng sản phẩm một
-	}
+void Inventory::calculateTotalValue(){
+    long long int totalValue = 0;
+    for (const auto &product : products) {
+        totalValue += product.getTotalValue();
+    }
+    cout << "Total Current Inventory Value: " << totalValue << endl;
 }
+void Inventory::displayInventory() { // Hàm hiển thị kho hàng
+    if (products.empty()) {
+        cout << "Inventory is empty." << endl;
+    } else {
+        cout << "=== Current Inventory ===" << endl;
+        cout << "-------------------------" << endl;
+        for (const auto &product : products) {
+            product.display();
+        }
+    }
+}
+
+
 void clearInputBuffer() { // Xóa bộ đệm
 	cin.clear(); 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa tối ưu hơn thôi.
@@ -165,7 +181,7 @@ int main() {
 		cin >> choice; // Nhập lựa chọn 
 
 		if (cin.fail()) { // Nếu nhập sai kiểu dữ liệu, thì sẽ ko chạy phần dưới nữa, mà tới vòng lặp mới
-			cout << "Invalid input. Please enter a number between 1 and 6.\n";
+			cout << "Invalid input. Please enter a number between 1 and 8.\n";
 			clearInputBuffer();
 			continue;
 		}
