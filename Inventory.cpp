@@ -1,5 +1,23 @@
 ﻿#include "Inventory.h"
 
+void Transaction::display() const {
+	cout << "Type: " << type
+		 << " | Quantity: " << quantity
+		 << " | Price: " << price
+		 << " | Date: " << date << endl;
+}
+
+void Product::addTransaction(const Transaction& transaction) {transactions.push_back(transaction);}
+void Product::displayTransactions() const {
+	if (transactions.empty()) {
+		cout << "No transactions found for this product." << endl;
+	} else {
+		cout << "=== Transactions for " << name << " ===" << endl;
+		for (const auto& transaction : transactions) {
+			transaction.display();
+		}
+	}
+}
 string Product::getName() { return name; } // Các hàm lấy và gán
 string Product::getCode() { return code; }
 int Product::getQuantity() { return quantity; }
@@ -110,4 +128,33 @@ void Inventory::displayInventory() { // Hàm hiển thị kho hàng
 			product.display();
 		}
 	}
+}
+void Inventory::displayProductTransactions(string code) {
+    int index = findProductIndexByCode(code);
+    if (index != -1) {
+        products[index].displayTransactions();
+    } else {
+        cout << "Product not found." << endl;
+    }
+}
+void Inventory::searchProductByName(string name) {
+    bool found = false;
+    for (auto& product : products) {
+        if (product.getName() == name) {
+            product.display();
+            found = true;
+        }
+    }
+    if (!found) {
+        cout << "Product not found." << endl;
+    }
+}
+
+void Inventory::searchProductByCode(string code) {
+    int index = findProductIndexByCode(code);
+    if (index != -1) {
+        products[index].display();
+    } else {
+        cout << "Product not found." << endl;
+    }
 }

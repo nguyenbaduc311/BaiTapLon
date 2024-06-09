@@ -1,5 +1,10 @@
-﻿#include"Inventory.h"
+﻿// Nguyen Ba Duc 20233327
+#include<bits/stdc++.h>
+using namespace std;
+
+#include"Inventory.h"
 #include<limits>
+
 void clearInputBuffer() { // Xóa bộ đệm
 	cin.clear();
 	cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa tối ưu hơn thôi.
@@ -18,8 +23,10 @@ int main() {
 		cout << "4. Export Product\n";
 		cout << "5. Edit Product\n";
 		cout << "6. Remove Product error\n";
-		cout << "7. Display Inventory\n";
-		cout << "8. Exit\n";
+		cout << "7. Calculate Total Value\n";
+		cout << "8. Display Inventory\n";
+		cout << "9. Back\n";
+		cout << "10. Exit\n";
 		cout << "Enter your choice: ";
 		cin >> choice; // Nhập lựa chọn 
 
@@ -108,6 +115,8 @@ int main() {
 					cout << "Enter price to edit: ";
 					cin >> price;
 					break;
+				default:
+					break;
 				}
 				cout << "Want edit more? y/n "; // Nhập 1 kí tự, nếu là y thì chương trình sẽ chạy tiếp
 			} while (_getch() == 'y');
@@ -131,12 +140,16 @@ int main() {
 			}
 			inventory.errorProduct(code, quantity);
 			break;
-
 		case 7:
+			inventory.calculateTotalValue();
+			break;
+		case 8:
 			inventory.displayInventory();
 			break;
+		case 9:
+			break;
 
-		case 8:
+		case 10:
 			cout << "Exiting program." << endl; // Thoát chương trình
 			break;
 
@@ -144,7 +157,7 @@ int main() {
 			cout << "Invalid choice. Please try again." << endl;
 			break;
 		}
-	} while (choice != 8);
+	} while (choice != 10 && choice != 9);
 
 	return 0;
 }

@@ -7,16 +7,31 @@
 #include <conio.h>
 
 using namespace std;
+
+class Transaction {
+private:
+	string type; // "import" or "export"
+	int quantity;
+	long long price; // Price per unit at the time of transaction
+	string date; // Date of transaction
+public:
+	Transaction(string type, int quantity, long long price, string date)
+		: type(type), quantity(quantity), price(price), date(date) {}
+	void display() const;
+};
+
 class Product { // tạo Đối tượng "sản phẩm"
 private:
 	string name; // TÊN sản phẩm
 	string code; // MÃ ĐỊNH DANH (mỗi sản phẩm phải có 1 mã khác nhau)
 	int quantity; // SỐ LƯỢNG sản phẩm
 	long long price; // ĐƠN GIÁ của 1 sản phẩm, vì là VNĐ nên để long long
+	vector<Transaction> transactions;
 public:
 	Product(string n, string c, int q, long long p) // hàm tạo, phải có đủ 4 tham số truyền vào
 		: name(n), code(c), quantity(q), price(p) {} // lệnh gán
-
+	void addTransaction(const Transaction& transaction);
+	void displayTransactions() const;
 	string getName(); // Các hàm lấy và gán
 	string getCode();
 	int getQuantity();
@@ -51,7 +66,10 @@ public:
 	void editProduct(string code, string name, long long price);
 	void exportProduct(string code, int quantity);
 	void errorProduct(string code, int quantity);
+	void searchProductByName(string name);
+	void searchProductByCode(string code);
 	void calculateTotalValue();
+	void displayProductTransactions(string code);
 	void displayInventory();
 };
 
