@@ -1,5 +1,7 @@
-// Nguyen Ba Duc 20233327
 #pragma once
+#ifndef DATE_H
+#define DATE_H
+
 #include<bits/stdc++.h>
 #include<vector>
 using namespace std;
@@ -13,6 +15,7 @@ public:
 	bool isLeapYear();
 	bool isValidDate();
 	void display() const;
+	Date& operator=(const Date& other);
 	bool operator==(const Date& other);
 	bool operator<(const Date& other);
 	bool operator>(const Date& other);
@@ -33,3 +36,5 @@ public:
 	void quicksortDate(int low, int high) ;
 	void displayDate();
 };
+
+#endif

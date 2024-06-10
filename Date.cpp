@@ -7,7 +7,7 @@ using namespace std;
 
 void Date::setDate(){
 	while (true){ // Nhập ngày tháng năm, nếu ngày ko tồn tại thì nhập lại
-		cout << "INPUT D M Y: ";
+		cout << "Enter dd/mm/yy: ";
 		cin >> day >> month >> year;
 		if (isValidDate()) break;
 		cout << "Date does not exist. Try again." << endl;
@@ -39,7 +39,17 @@ bool Date::isValidDate() {
    return true;
 }
 void Date::display() const {
-	cout << day << "/"<< month << "/"<< year;
+	cout << setw(2) << setfill('0') << day << '/'
+              << setw(2) << setfill('0') << month << '/'
+              << year << endl;
+}
+Date& Date::operator=(const Date& other) {
+    if (this != &other) {
+        day = other.day;
+        month = other.month;
+        year = other.year;
+    }
+    return *this;
 }
 bool Date::operator==(const Date& other){
 	return (day == other.day && month == other.month && year == other.year);
@@ -108,26 +118,30 @@ void LstDate::displayDate() { // Hàm hiển thị kho hàng
 }
 
 
-// int main(){
-// 	// time_t t = time(nullptr);
-// 	// tm* now = localtime(&t);
-// 	// int day = now->tm_mday;
-// 	// int month = now->tm_mon+1;
-// 	// int year = now->tm_year+1900;
-// 	int d,m,y;
+int main(){
+	// time_t t = time(nullptr);
+	// tm* now = localtime(&t);
+	// int day = now->tm_mday;
+	// int month = now->tm_mon+1;
+	// int year = now->tm_year+1900;
+	// int d,m,y;
 
-// 	LstDate lstdate;
-// 	lstdate.addDate(Date(24,9,2005));
-// 	lstdate.addDate(Date(3,11,2005));
-// 	lstdate.addDate(Date(28,3,2005));
-// 	lstdate.addDate(Date(27,9,2007));
-// 	lstdate.addDate(Date(27,9,2006));
-// 	cout << "BEFORE: \n";
-// 	lstdate.displayDate();
-// 	lstdate.quicksortDate(0,lstdate.size()-1);
-// 	cout << "AFTER: \n";
-// 	lstdate.displayDate();
+	// LstDate lstdate;
+	// lstdate.addDate(Date(24,9,2005));
+	// lstdate.addDate(Date(3,11,2005));
+	// lstdate.addDate(Date(28,3,2005));
+	// lstdate.addDate(Date(27,9,2007));
+	// lstdate.addDate(Date(27,9,2006));
+	// cout << "BEFORE: \n";
+	// lstdate.displayDate();
+	// lstdate.quicksortDate(0,lstdate.size()-1);
+	// cout << "AFTER: \n";
+	// lstdate.displayDate();
+    // Date A;
+    // A.setDate();
+    // Date B = A;
+    // A.display();
+    // B.display();
 
-
-// 	return 0;
-// }
+	// return 0;
+}
