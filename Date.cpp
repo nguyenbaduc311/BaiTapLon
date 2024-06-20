@@ -99,6 +99,13 @@ int LstDate::partition(int low, int high) {
     return (i + 1); // return the partitioning index
 }
 
+ostream& operator<<(ostream& os, const Date& dt) {
+    os << setw(2) << setfill('0') << dt.day << "/"
+       << setw(2) << setfill('0') << dt.month << "/"
+       << setw(4) << setfill('0') << dt.year ; 
+    return os;
+}
+
 // Quicksort function
 
 void LstDate::quicksortDate(int low, int high) {

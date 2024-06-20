@@ -21,6 +21,8 @@ public:
 	bool operator>(const Date& other);
 	bool operator>=(const Date& other);
 	bool operator<=(const Date& other);
+    friend ostream& operator<<(ostream& os, const Date& dt);
+
 	~Date(){};
 };
 class LstDate {

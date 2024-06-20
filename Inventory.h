@@ -5,20 +5,10 @@
 #include <vector> // là thư viện để thao tác với mảng thuận lợi hơn
 #include <string> // thư viện liên quan tới chuỗi kí tự 
 #include <conio.h>
+#include "Date.h"
 
 using namespace std;
 
-class Transaction {
-private:
-	string type; // "import" or "export"
-	int quantity;
-	long long price; // Price per unit at the time of transaction
-	string date; // Date of transaction
-public:
-	Transaction(string type, int quantity, long long price, string date)
-		: type(type), quantity(quantity), price(price), date(date) {}
-	void display() const;
-};
 
 class Product { // tạo Đối tượng "sản phẩm"
 private:
@@ -72,7 +62,6 @@ public:
 	void displayProductTransactions(string code);
 	void displayInventory();
 };
-
 
 
 #endif

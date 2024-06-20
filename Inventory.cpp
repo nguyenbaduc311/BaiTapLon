@@ -1,23 +1,7 @@
 ﻿#include "Inventory.h"
+// #include "Address.h"
+#include "Date.h"
 
-void Transaction::display() const {
-	cout << "Type: " << type
-		 << " | Quantity: " << quantity
-		 << " | Price: " << price
-		 << " | Date: " << date << endl;
-}
-
-void Product::addTransaction(const Transaction& transaction) {transactions.push_back(transaction);}
-void Product::displayTransactions() const {
-	if (transactions.empty()) {
-		cout << "No transactions found for this product." << endl;
-	} else {
-		cout << "=== Transactions for " << name << " ===" << endl;
-		for (const auto& transaction : transactions) {
-			transaction.display();
-		}
-	}
-}
 string Product::getName() { return name; } // Các hàm lấy và gán
 string Product::getCode() { return code; }
 int Product::getQuantity() { return quantity; }
@@ -43,30 +27,33 @@ void Inventory::addProduct(Product product) { // Hàm thêm sản phẩm mới
 	int index = findProductIndexByCode(product.getCode());
 	if (index == -1) { // Nếu ko có mặt hàng này thì mới thêm vào mảng
 		products.push_back(product); // Hàm pushback là thêm phần tử vào mảng
-		cout << "Product added successfully." << endl;
+		cout << "\n--> Product added successfully." << endl;
 	}
 	else {
-		cout << "Product with this code already exists." << endl;
+		cout << "\n--> Product with this code already exists." << endl;
 	}
 }
 void Inventory::removeProduct(string code) { // Hàm xóa sản phẩm khỏi kho
 	int index = findProductIndexByCode(code);
 	if (index != -1) { // erase(*địa chỉ cần xóa*) : để xóa sản phẩm
 		products.erase(products.begin() + index); // begin() là lấy vị trí con trỏ đầu tiên của mảng
-		cout << "Product removed successfully." << endl;
+		cout << "\n--> Product removed successfully." << endl;
 	}
 	else {
-		cout << "Product not found." << endl;
+		cout << "\n--> Product not found." << endl;
 	}
 }
 void Inventory::importProduct(string code, int quantity) { // Tìm sản phẩm rồi thêm số lượng sản phẩm
 	int index = findProductIndexByCode(code);
 	if (index != -1) {
 		products[index].setQuantity(products[index].getQuantity() + quantity); // Thêm số lượng
-		cout << "Product imported successfully." << endl;
+		Date A; A.setDate();
+		Transaction transaction("Import", quantity, products[index].getPrice(), A);
+		products[index].addTransaction(transaction);
+		cout << "\n--> Product imported successfully." << endl;
 	}
 	else {
-		cout << "Product not found." << endl;
+		cout << "\n--> Product not found." << endl;
 	}
 }
 void Inventory::editProduct(string code, string name, long long price) { // Sửa thông số của sản phâm (tên, giá)
@@ -74,10 +61,10 @@ void Inventory::editProduct(string code, string name, long long price) { // Sử
 	if (index != -1) {
 		products[index].setName(name); // SỬa lại tên
 		products[index].setPrice(price); // Sửa lại giá
-		cout << "Product edited successfully." << endl;
+		cout << "\n--> Product edited successfully." << endl;
 	}
 	else {
-		cout << "Product not found." << endl;
+		cout << "\n--> Product not found." << endl;
 	}
 }
 void Inventory::exportProduct(string code, int quantity) { // Xuất hàng 
@@ -85,14 +72,17 @@ void Inventory::exportProduct(string code, int quantity) { // Xuất hàng
 	if (index != -1) {
 		if (products[index].getQuantity() >= quantity) { // check xem có đủ lượng hàng để xuất hàng ko
 			products[index].setQuantity(products[index].getQuantity() - quantity); // Giảm số lượng
-			cout << "Product exported successfully." << endl;
+			Date A; A.setDate();
+			Transaction transaction("Export", quantity, products[index].getPrice(), A);
+            products[index].addTransaction(transaction);
+			cout << "\n--> Product exported successfully." << endl;
 		}
 		else {
-			cout << "Not enough quantity in stock." << endl;
+			cout << "\n--> Not enough quantity in stock." << endl;
 		}
 	}
 	else {
-		cout << "Product not found." << endl;
+		cout << "\n--> Product not found." << endl;
 	}
 }
 void Inventory::errorProduct(string code, int quantity) { // Vứt bỏ hàng lỗi ra khỏi kho
@@ -100,14 +90,14 @@ void Inventory::errorProduct(string code, int quantity) { // Vứt bỏ hàng l�
 	if (index != -1) {
 		if (products[index].getQuantity() >= quantity) { // check xem có đủ lượng hàng để trừ ko
 			products[index].setQuantity(products[index].getQuantity() - quantity); // Giảm số lượng hàng hỏng
-			cout << "Error Product removed successfully." << endl;
+			cout << "\n--> Error Product removed successfully." << endl;
 		}
 		else {
-			cout << "Not enough quantity in stock." << endl;
+			cout << "\n--> Not enough quantity in stock." << endl;
 		}
 	}
 	else {
-		cout << "Product not found." << endl;
+		cout << "\n--> Product not found." << endl;
 	}
 }
 void Inventory::calculateTotalValue() {
@@ -115,15 +105,15 @@ void Inventory::calculateTotalValue() {
 	for (const auto& product : products) {
 		totalValue += product.getTotalValue();
 	}
-	cout << "Total Current Inventory Value: " << totalValue << endl;
+	cout << "\n--> Total Current Inventory Value: " << totalValue << endl;
 }
 void Inventory::displayInventory() { // Hàm hiển thị kho hàng
 	if (products.empty()) {
-		cout << "Inventory is empty." << endl;
+		cout << "\n--> Inventory is empty." << endl;
 	}
 	else {
-		cout << "=== Current Inventory ===" << endl;
-		cout << "-------------------------" << endl;
+		cout << "\t\t\t   Current Inventory" << endl;
+		cout << "\t\t\t------------------------" << endl;
 		for (const auto& product : products) {
 			product.display();
 		}
@@ -149,7 +139,6 @@ void Inventory::searchProductByName(string name) {
         cout << "Product not found." << endl;
     }
 }
-
 void Inventory::searchProductByCode(string code) {
     int index = findProductIndexByCode(code);
     if (index != -1) {
