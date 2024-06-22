@@ -12,6 +12,7 @@ private:
 public:
 	Date(int a=1, int b=1,int c=1): day(a),month(b),year(c) {}
 	void setDate();
+	void setDate(string date);
 	bool isLeapYear();
 	bool isValidDate();
 	void display() const;
@@ -22,6 +23,7 @@ public:
 	bool operator>=(const Date& other);
 	bool operator<=(const Date& other);
     friend ostream& operator<<(ostream& os, const Date& dt);
+
 
 	~Date(){};
 };

@@ -10,7 +10,6 @@
 #include <fcntl.h>
 #include <vector>
 #include <Windows.h>
-#include <random>
 
 using namespace std;
 
@@ -160,6 +159,7 @@ public:
 	string getPhoneNumber() const;
 	// ham nhap
 	void setInfoAddress();
+	void setInfoAddress(string a,string b,string c);
 	//ham gan
 	void setEmail(const string& email);
 	void setAddress(const string& address);
@@ -175,6 +175,7 @@ private:
 public:
 	Date(int a=1, int b=1,int c=1): day(a),month(b),year(c) {}
 	void setDate();
+	void setDate(string date);
 	bool isLeapYear();
 	bool isValidDate();
 	void display() const;
@@ -235,6 +236,7 @@ private:
 public:
 	void swapProduct(Product& a, Product& b);
 	void inputFileInventory(string file);
+	void inputFileIO(string file);
 	void updateFileInventory(string file);
 	void addProduct(Product product);
 	void removeProduct(string code);
@@ -258,6 +260,11 @@ void Address::setInfoAddress(){
 	getline(cin, address);
 	cout << "Enter phone number: ";
 	getline(cin, phoneNumber);
+}
+void Address::setInfoAddress(string a,string b,string c){ 
+	email = a;
+	address = b;
+	phoneNumber = c;
 }
 string Address::getEmail() const {
 	return email;  // tra ve gia tri bien thanh vien email
@@ -294,6 +301,12 @@ void Date::setDate(){
 		if (isValidDate()) break;
 		cout << "Date does not exist. Try again." << endl;
 	} 
+}
+void Date::setDate(string date){
+    vector<string> token = split(date, '/');
+    day = stoi(token[0]);
+    month = stoi(token[1]);
+    year = stoi(token[2]);
 }
 bool Date::isLeapYear() {
    if (year % 4 != 0) {
@@ -453,7 +466,6 @@ void Inventory::addProduct(Product product) { // Hàm thêm sản phẩm mới
 		cout << "\n--> Product with this code already exists." << endl;
 	}
 }
-
 void Inventory::removeProduct(string code) { // Hàm xóa sản phẩm khỏi kho
 	int index = findProductIndexByCode(code);
 	if (index != -1) { // erase(*địa chỉ cần xóa*) : để xóa sản phẩm
@@ -600,6 +612,39 @@ void Inventory::inputFileInventory(string file){
 
 	inputFileKho.close(); 
 }
+void Inventory::inputFileIO(string file){
+	ifstream inputFileKho(file);
+
+	if (!inputFileKho.is_open()) {
+	}
+	
+	string line;
+	vector<vector<string>> tokens;
+	vector<string> headline = split(file,'.') ;
+
+	if (getline(inputFileKho, line)) { 
+		removeBOM(line);
+		vector<string> token = split(line, ',');
+		int index = findProductIndexByCode(token[0]);
+		if (index != -1) { // Nếu ko có mặt hàng này thì mới thêm vào mảng
+			Date A; A.setDate(token[4]); Address B; B.setInfoAddress(token[5],token[6],token[7]);
+			Transaction transaction(headline[0], stoi(token[2]), stoll(token[3]), A, B);
+			products[index].addTransaction(transaction);
+		}
+	}
+	// Read lines from the input file
+	while (getline(inputFileKho, line)) {
+		vector<string> token = split(line, ',');
+		int index = findProductIndexByCode(token[0]);
+		if (index != -1) { // Nếu ko có mặt hàng này thì mới thêm vào mảng
+			Date A; A.setDate(token[4]); Address B; B.setInfoAddress(token[5],token[6],token[7]);
+			Transaction transaction(headline[0], stoi(token[2]), stoll(token[3]), A, B);
+			products[index].addTransaction(transaction); 
+		}
+	}
+
+	inputFileKho.close(); 
+}
 void Inventory::updateFileInventory(string file){
 	ofstream outputFile(file); // mở rồi đóng để xóa dữ liệu trong file
 	outputFile.close();
@@ -653,7 +698,6 @@ void endgame(){
 	_setmode(_fileno(stdin), _O_U16TEXT);
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	system("cls");
-	SET_COLOR(12);
 	wcout << L"\n\n\n";
 	wcout << L"\t\t\tCẢM ƠN VÌ ĐÃ SỬ DỤNG PHẦN MỀM CỦA CHÚNG TÔI" << endl;
 	wcout << L"\t\t\t                                   -the liems-" << endl;
@@ -912,6 +956,8 @@ int main(){
 	if (password("20233327")){
 		while (running){
 			inventory.inputFileInventory("INVENTORY.csv");
+			inventory.inputFileIO("IMPORT.csv");
+			inventory.inputFileIO("EXPORT.csv");
 			system("cls");
 			cout << "\n\n\t\t THE LIEMS MANAGEMENT SYSTEM\n";
 			cout << "=============================================================";
@@ -936,6 +982,8 @@ int main(){
 			if (choice1 == 3) {
 				system("cls");
 				moderator();
+				getch();
+				endgame();
 				exit(0);
 			}
 			inventory.updateFileInventory("INVENTORY.csv");

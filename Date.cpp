@@ -1,9 +1,20 @@
 // Nguyen Ba Duc 20233327
 #include<bits/stdc++.h>
+#include <string>
 #include "Date.h"
 #include <vector>
 // #include<ctime>
 using namespace std;
+
+vector<string> split(const string &str, char del) { // Hàm split được dùng để chia một chuỗi str thành các phần tử con dựa trên ký tự phân tách del
+    vector<string> tokens;
+    string token;
+    istringstream tokenStream(str); // istringstream là một luồng đầu vào từ chuỗi, giúp sử dụng hàm getline để đọc từng phần của chuỗi.
+    while (getline(tokenStream, token, del)) { // Đọc từ tokenStream đến khi gặp ký tự phân tách del
+        tokens.push_back(token); // Mỗi lần đọc được một phần tử con, nó được lưu vào token
+    }
+    return tokens;
+}
 
 void Date::setDate(){
 	while (true){ // Nhập ngày tháng năm, nếu ngày ko tồn tại thì nhập lại
@@ -13,6 +24,13 @@ void Date::setDate(){
 		cout << "Date does not exist. Try again." << endl;
 	} 
 }
+void Date::setDate(string date){
+    vector<string> token = split(date, '/');
+    day = stoi(token[0]);
+    month = stoi(token[1]);
+    year = stoi(token[2]);
+}
+
 bool Date::isLeapYear() {
    if (year % 4 != 0) {
        return false;
@@ -145,7 +163,7 @@ int main(){
 	// cout << "AFTER: \n";
 	// lstdate.displayDate();
     // Date A;
-    // A.setDate();
+    // A.setDate("24/11/2005");
     // Date B = A;
     // A.display();
     // B.display();
