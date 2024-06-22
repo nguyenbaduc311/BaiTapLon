@@ -84,14 +84,15 @@ void VND(long long price){
 	cout << p;
 }
 
-void display4info(){
+void display5info(){
 	cout << left << "|" << setw(15) << center("Product Code", 15)
 	             << "|" << setw(25) << center("Name", 25)
 	             << "|" << setw(10) << center("Quantity", 10)
 	             << "|" << setw(15) << center("Price", 15)
+	             << "|" << setw(20) << center("Total Value", 20)
 				 << "|"
 				 << endl;
-	cout << string(70, '-') << endl;
+	cout << string(91, '-') << endl;
 }
 void display6info(){
 	cout << left << "|" << setw(12) << center("Product Code", 12)
@@ -421,6 +422,7 @@ void Product::display() const { // hàm hiển thị các thông số của sả
 				 << "|" << setw(25) << truncateName(name, 25)
 		 << right<< "|" << setw(10) << quantity
 				 << "|" << setw(15); VND(price); 
+	cout << right << "|" << setw(20); VND(getTotalValue());
 	cout << "|";
 	cout << endl;
 }
@@ -575,7 +577,7 @@ void Inventory::displayInventory() { // Hàm hiển thị kho hàng
 	}
 	else {
 		cout << "\t\t\t-Current Inventory-\n\n" ;
-		display4info();
+		display5info();
 		for (const auto& product : products) {
 			product.display();
 		}
@@ -593,7 +595,7 @@ void Inventory::searchProductByName(string name) {
 	bool found = false;
 	for (auto& product : products) {
 		if (product.getName() == name) {
-			display4info();
+			display5info();
 			product.display();
 			found = true;
 		}
@@ -605,7 +607,7 @@ void Inventory::searchProductByName(string name) {
 void Inventory::searchProductByCode(string code) {
 	int index = findProductIndexByCode(code);
 	if (index != -1) {
-		display4info();
+		display5info();
 		products[index].display();
 	} else {
 		cout << "Product not found." << endl;
