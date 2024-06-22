@@ -247,6 +247,9 @@ public:
 	void searchProductByName(string name);
 	void searchProductByCode(string code);
 	void calculateTotalValue();
+	int size();
+	int partition(int low,int high);
+	void quicksortProduct(int low,int high);
 	void displayProductTransactions(string code);
 	void displayInventory();
 };
@@ -378,7 +381,7 @@ void Transaction::display() const {
 		         << "|" << setw(15); VND(price);
 	cout << right<< "|" << setw(10) << date 
 	             << "|" << setw(25) << address.getEmail()
-	             << "|" << setw(20) << address.getAddress()
+	             << "|" << setw(30) << truncateName(address.getAddress(),30)
 	             << "|" << setw(12) << center(address.getPhoneNumber(),12); 
 	cout << "|";
 	cout << endl;
@@ -393,12 +396,12 @@ void Product::displayTransactions() const {
 		cout << left << "|" << setw(8) << center("Type", 8)
 		             << "|" << setw(8) << center("Quantity", 8)
 		             << "|" << setw(15) << center("Price", 15)
-		             << "|" << setw(10) << center("Date", 12)
+		             << "|" << setw(10) << center("Date", 10)
 		             << "|" << setw(25) << center("Email", 25)
-		             << "|" << setw(20) << center("Address", 20)
+		             << "|" << setw(30) << center("Address", 30)
 		             << "|" << setw(12) << center("Phone", 12)
 		             << "|" << endl;
-		cout << string(108, '-') << endl;
+		cout << string(116, '-') << endl;
 		for (const auto& transaction : transactions) {
 			transaction.display();
 		}
@@ -540,6 +543,31 @@ void Inventory::calculateTotalValue() {
 	}
 	cout << "\n--> Total Current Inventory Value: " ;VND(totalValue);
 	cout << endl;
+}
+int Inventory::size(){
+	return products.size();
+}
+int Inventory::partition(int low, int high) {
+    Product pivot = products[high]; // pivot element
+    int i = low - 1; // index of the smaller element
+
+    for (int j = low; j <= high - 1; j++) {
+        // If the current element is smaller than or equal to the pivot
+        if (products[j].getTotalValue() >= pivot.getTotalValue()) {
+            i++; // increment the index of the smaller element
+            swapProduct(products[i], products[j]); // swapproduct elements
+        }
+    }
+    swapProduct(products[i + 1], products[high]); // swap the pivot element with the element at i+1
+    return (i + 1); // return the partitioning index
+}
+void Inventory::quicksortProduct(int low, int high) {
+    if (low < high) {
+        int pi = partition(low, high); // partitioning index
+
+        quicksortProduct(low, pi - 1); // recursively sort elements before partition
+        quicksortProduct(pi + 1, high); // recursively sort elements after partition
+    }
 }
 void Inventory::displayInventory() { // Hàm hiển thị kho hàng
 	if (products.empty()) {
@@ -720,8 +748,9 @@ void khungmenu(){
 	cout << "|    8. Display Inventory                        |______|iems      |" << endl;
 	cout << "|    9. Search Product                                             |" << endl;
 	cout << "|    10. Display Product Transactions                              |" << endl;
-	cout << "|    11. Back                                                      |" << endl;
-	cout << "|    12. Exit                                                      |" << endl;
+	cout << "|    11. Sort by Total Value                                       |" << endl;
+	cout << "|    12. Back                                                      |" << endl;
+	cout << "|    13. Exit                                                      |" << endl;
 	cout << "|*________________________________________________________________*|" << endl;
 	cout << "                                                                    " << endl;
 }
@@ -884,19 +913,21 @@ void menu1(Inventory & inventory,bool &run){
 				inventory.displayProductTransactions(code);
 				break;
 			case 11:
-				break;
+				inventory.quicksortProduct(0,inventory.size()-1);
 			case 12:
+				break;
+			case 13:
 				endgame();
 				run = false;
 				break;
 			default:
 				break;
 		}
-		if (choice != 11 && choice != 12) {
+		if (choice != 12 && choice != 13) {
 			clearInputBuffer();
 			cin.get(); // Đợi người dùng nhấn Enter
 		}
-	} while (choice != 12 && choice != 11);
+	} while (choice != 13 && choice != 12);
 }
 void menu2(Inventory & inventory,bool &run){
 
