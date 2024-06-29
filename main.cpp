@@ -242,7 +242,8 @@ public:
 	void addProduct(Product product);
 	void removeProduct(string code);
 	void importProduct(string code, int quantity);
-	void editProduct(string code, string name, long long price);
+	void editNameProduct(string code, string name);
+	void editPriceProduct(string code, long long price);
 	void exportProduct(string code, int quantity);
 	void errorProduct(string code, int quantity);
 	void searchProductByName(string name);
@@ -494,10 +495,19 @@ void Inventory::importProduct(string code, int quantity) { // Tìm sản phẩm 
 		cout << "\n--> Product not found." << endl;
 	}
 }
-void Inventory::editProduct(string code, string name, long long price) { // Sửa thông số của sản phâm (tên, giá)
+void Inventory::editNameProduct(string code, string name) { // Sửa thông số của sản phâm (tên, giá)
 	int index = findProductIndexByCode(code);
 	if (index != -1) {
 		products[index].setName(name); // SỬa lại tên
+		cout << "\n--> Product edited successfully." << endl;
+	}
+	else {
+		cout << "\n--> Product not found." << endl;
+	}
+}
+void Inventory::editPriceProduct(string code,long long price) { // Sửa thông số của sản phâm (tên, giá)
+	int index = findProductIndexByCode(code);
+	if (index != -1) {
 		products[index].setPrice(price); // Sửa lại giá
 		cout << "\n--> Product edited successfully." << endl;
 	}
@@ -698,7 +708,7 @@ void moderator(){ // In ra thông tin các bạn bằng tiếng việt
 	wcout << L"\n\n\t\t\tMai Ngọc Phúc     |  20233580  |  Coder" << endl;
 	SET_COLOR(6);
 	wcout << L"\n\t\t\t\t\t                               -the liems-" << endl;
-	SET_COLOR(10);
+	SET_COLOR(7);
 	wcout << L"\n\n\n";
 }
 bool password(const char* password){ // hàm điền mật khẩu
@@ -847,10 +857,12 @@ void menu1(Inventory & inventory,bool &run){
 						cout << "Enter name to edit: ";
 						clearInputBuffer();
 						getline(cin, name);
+						inventory.editNameProduct(code, name);
 						break;
 					case 2:
 						cout << "Enter price to edit: ";
 						cin >> price;
+						inventory.editPriceProduct(code,  price);
 						break;
 					default:
 						break;
@@ -862,7 +874,6 @@ void menu1(Inventory & inventory,bool &run){
 					clearInputBuffer();
 					break; // thoát khỏi case luôn và quay lại vòng lặp
 				}
-				inventory.editProduct(code, name, price);
 				break;
 			case 6: // Xóa sản phẩm hỏng
 				cout << "Enter product error code to remove: ";
