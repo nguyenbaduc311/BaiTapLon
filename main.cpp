@@ -64,7 +64,6 @@ void clearInputBuffer() { // Xóa bộ đệm
 	cin.clear();
 	cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa tối ưu hơn thôi.
 }
-
 void VND(long long price){
 	long long giaTien = price;
 	int i = 1,j=0;
@@ -84,6 +83,7 @@ void VND(long long price){
 	cout << p;
 }
 
+// hàm hiển thị
 void display5info(){
 	cout << left << "|" << setw(15) << center("Product Code", 15)
 	             << "|" << setw(25) << center("Name", 25)
@@ -699,13 +699,13 @@ void moderator(){ // In ra thông tin các bạn bằng tiếng việt
 	system("cls");
 	wcout << L"\n\n\n";
 	SET_COLOR(13);
-	wcout << L"\n\n\t\t\tNguyễn Bá Đức     |  20233327  |  Designer" << endl;
+	wcout << L"\n\n\t\t\tNguyễn Bá Đức     |  20233327  |  Coder & Word & Designer" << endl;
 	SET_COLOR(9);
-	wcout << L"\n\n\t\t\tNguyễn Hoàng Đức  |  20233328  |  Coder" << endl;
+	wcout << L"\n\n\t\t\tNguyễn Hoàng Đức  |  20233328  |  Coder & Tester" << endl;
 	SET_COLOR(11);
-	wcout << L"\n\n\t\t\tNguyễn Văn Hội    |  20233149  |  Coder" << endl;
+	wcout << L"\n\n\t\t\tNguyễn Văn Hội    |  20233149  |  Word & Coder & Researcher" << endl;
 	SET_COLOR(12);
-	wcout << L"\n\n\t\t\tMai Ngọc Phúc     |  20233580  |  Coder" << endl;
+	wcout << L"\n\n\t\t\tMai Ngọc Phúc     |  20233580  |  Coder & Idea & Data" << endl;
 	SET_COLOR(6);
 	wcout << L"\n\t\t\t\t\t                               -the liems-" << endl;
 	SET_COLOR(7);
@@ -927,6 +927,7 @@ void menu1(Inventory & inventory,bool &run){
 				break;
 			case 11:
 				inventory.quicksortProduct(0,inventory.size()-1);
+				cout << "Sort Product successfully";
 			case 12:
 				break;
 			case 13:
@@ -957,7 +958,7 @@ void menu2(Inventory & inventory,bool &run){
 		cin >> choice;
 
 		if (cin.fail()) { // Nếu nhập sai kiểu dữ liệu, thì sẽ ko chạy phần dưới nữa, mà tới vòng lặp mới
-			cout << "Invalid input. Please enter a number between 1 and 6.\n";
+			cout << "Invalid input. Please enter a number between 1 and 3.\n";
 			continue;
 		}
 
@@ -997,7 +998,7 @@ int main(){
 	cout <<   "\n\t\t\t--------------------";
 
 	bool running = true;
-	if (password("20233327")){
+	if (password("66668888")){
 		while (running){
 			inventory.inputFileInventory("INVENTORY.csv");
 			inventory.inputFileIO("IMPORT.csv");
